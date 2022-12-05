@@ -3,12 +3,9 @@ package com.interview;
 public class Main {
     public static void main(String[] args) {
         var input = "This is a paragraph";
-        var swc = new Thread(new ShortWordWordConsumer());
-        var lwc = new Thread(new LongWordWordConsumer());
-        var mwc = new Thread(new FinalWordConsumer());
-        swc.start();
-        lwc.start();
-        mwc.start();
-        new Producer().produce(input);
+        new Thread(new ShortWordConsumer()).start();
+        new Thread(new LongWordConsumer()).start();
+        new Thread(new FinalWordConsumer()).start();
+        new Thread(new ParagraphProcessor(input)).start();
     }
 }
