@@ -7,7 +7,7 @@ public class ShortWordWordConsumer implements WordConsumer {
 
     @Override
     public void process(Word word) {
-        SimpleWordDataSource.getFinalWordDataSource().add(new Word(
+        SimpleWordDataSource.getFinalShortWordDataSource().add(new Word(
                 word.isLast(),
                 word.index(),
                 ofNullable(word.value()).map(w -> w + "1").orElse(null))
@@ -16,7 +16,7 @@ public class ShortWordWordConsumer implements WordConsumer {
 
     @Override
     public void run() {
-        while(!SimpleWordDataSource.getShortWordDataSource().isEmpty() || !isLastConsumed) {
+        while (!SimpleWordDataSource.getShortWordDataSource().isEmpty() || !isLastConsumed) {
             SimpleWordDataSource.getShortWordDataSource().poll().ifPresent(w -> {
                 process(w);
                 isLastConsumed = w.isLast();

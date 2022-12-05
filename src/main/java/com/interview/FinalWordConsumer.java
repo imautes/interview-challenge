@@ -1,27 +1,38 @@
 package com.interview;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import static java.lang.String.join;
+import static java.util.Optional.ofNullable;
 
 public class FinalWordConsumer implements WordConsumer {
-    private static final List<String> WORDS = new ArrayList<>();
-    private boolean lastConsumed = false;
+    private boolean isLastLongConsumed = false;
+    private boolean isLastShortConsumed = false;
+    private final Map<Integer, String> result = new TreeMap<>();
 
     @Override
     public void process(Word word) {
-        WORDS.add(word.index(), word.value());
-        if (word.isLast()) {
-            lastConsumed = true;
-        }
+        ofNullable(word.value()).ifPresent(w -> result.put(word.index(), w));
     }
 
     @Override
     public void run() {
-        while(!lastConsumed || !SimpleWordDataSource.getFinalWordDataSource().isEmpty()) {
-            SimpleWordDataSource.getFinalWordDataSource().poll().ifPresent(w -> {
-                process(w);
-                lastConsumed = w.isLast();
-            });
+        while (!SimpleWordDataSource.getFinalLongWordDataSource().isEmpty() || !isLastLongConsumed
+                || !SimpleWordDataSource.getFinalShortWordDataSource().isEmpty() || !isLastShortConsumed) {
+            if (!SimpleWordDataSource.getFinalLongWordDataSource().isEmpty()) {
+                SimpleWordDataSource.getFinalLongWordDataSource().poll().ifPresent(w -> {
+                    process(w);
+                    isLastLongConsumed = w.isLast();
+                });
+            }
+            if (!SimpleWordDataSource.getFinalShortWordDataSource().isEmpty()) {
+                SimpleWordDataSource.getFinalShortWordDataSource().poll().ifPresent(w -> {
+                    process(w);
+                    isLastShortConsumed = w.isLast();
+                });
+            }
         }
+        System.out.println(join(" ", result.values()));
     }
 }

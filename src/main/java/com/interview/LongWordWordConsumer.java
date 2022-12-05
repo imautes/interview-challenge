@@ -4,9 +4,10 @@ import static java.util.Optional.ofNullable;
 
 public class LongWordWordConsumer implements WordConsumer {
     private boolean isLastConsumed = false;
+
     @Override
     public void process(Word word) {
-        SimpleWordDataSource.getFinalWordDataSource().add(new Word(
+        SimpleWordDataSource.getFinalLongWordDataSource().add(new Word(
                 word.isLast(),
                 word.index(),
                 ofNullable(word.value()).map(w -> w + "2").orElse(null))
@@ -15,7 +16,7 @@ public class LongWordWordConsumer implements WordConsumer {
 
     @Override
     public void run() {
-        while(!SimpleWordDataSource.getLongWordDataSource().isEmpty() || !isLastConsumed) {
+        while (!SimpleWordDataSource.getLongWordDataSource().isEmpty() || !isLastConsumed) {
             SimpleWordDataSource.getLongWordDataSource().poll().ifPresent(w -> {
                 process(w);
                 isLastConsumed = w.isLast();

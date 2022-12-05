@@ -34,13 +34,18 @@ public class SimpleWordDataSource implements WordDataSource {
         return SimpleWordDataSource.InstanceHolder.shortWordDataSource;
     }
 
-    public static WordDataSource getFinalWordDataSource() {
-        return SimpleWordDataSource.InstanceHolder.finalWordDataSource;
+    public static WordDataSource getFinalLongWordDataSource() {
+        return SimpleWordDataSource.InstanceHolder.finalLongWordDataSource;
+    }
+
+    public static WordDataSource getFinalShortWordDataSource() {
+        return SimpleWordDataSource.InstanceHolder.finalShortWordDataSource;
     }
 
     private static final class InstanceHolder {
         private static final WordDataSource longWordDataSource = new SimpleWordDataSource();
         private static final WordDataSource shortWordDataSource = new SimpleWordDataSource();
-        private static final WordDataSource finalWordDataSource = new SimpleWordDataSource();
+        private static final WordDataSource finalLongWordDataSource = new SimpleWordDataSource();
+        private static final WordDataSource finalShortWordDataSource = new SimpleWordDataSource();
     }
 }
