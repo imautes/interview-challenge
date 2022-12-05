@@ -1,19 +1,25 @@
 package com.interview;
 
-import static com.interview.SimpleWordDataSource.FINAL_WORDS;
-import static com.interview.SimpleWordDataSource.LONG_WORDS;
 import static java.util.Optional.ofNullable;
 
 public class LongWordWordConsumer implements WordConsumer {
+    private boolean isLastConsumed = false;
     @Override
     public void process(Word word) {
-        FINAL_WORDS.add(new Word(word.isLast(), word.index(), word + "2"));
+        SimpleWordDataSource.getFinalWordDataSource().add(new Word(
+                word.isLast(),
+                word.index(),
+                ofNullable(word.value()).map(w -> w + "2").orElse(null))
+        );
     }
 
     @Override
     public void run() {
-        while (true) {
-            ofNullable(LONG_WORDS.poll()).ifPresent(this::process);
+        while(!SimpleWordDataSource.getLongWordDataSource().isEmpty() || !isLastConsumed) {
+            SimpleWordDataSource.getLongWordDataSource().poll().ifPresent(w -> {
+                process(w);
+                isLastConsumed = w.isLast();
+            });
         }
     }
 }
