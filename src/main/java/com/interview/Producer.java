@@ -1,7 +1,7 @@
 package com.interview;
 
-import static com.interview.Topic.LONG_WORDS;
-import static com.interview.Topic.SHORT_WORDS;
+import static com.interview.SimpleWordDataSource.LONG_WORDS;
+import static com.interview.SimpleWordDataSource.SHORT_WORDS;
 
 public class Producer {
     public void produce(String input) {
